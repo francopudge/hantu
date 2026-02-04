@@ -6,28 +6,39 @@
 <title>Escape from the Ghost</title>
 
 <style>
+/* RESET + CENTER */
 body {
   font-family: Arial, sans-serif;
   background: #0b0b0b;
   color: white;
-  text-align: center;
   margin: 0;
-  padding: 10px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+/* WRAPPER */
+.game-wrapper {
+  width: 100%;
+  max-width: 540px;
+  padding: 10px;
+  text-align: center;
+}
+
+/* TITLE */
 h1 {
   margin-top: 10px;
   font-size: clamp(18px, 5vw, 28px);
 }
 
-/* BOARD RESPONSIVE */
+/* BOARD */
 .board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   gap: 4px;
   margin: 15px auto;
   width: 100%;
-  max-width: 520px;
 }
 
 .cell {
@@ -89,11 +100,17 @@ h1 {
   .controls button {
     flex: 1 1 45%;
   }
+
+  .game-wrapper {
+    padding: 14px;
+  }
 }
 </style>
 </head>
 
 <body>
+
+<div class="game-wrapper">
 
 <h1>ESCAPE FROM THE GHOST</h1>
 
@@ -118,6 +135,8 @@ h1 {
 </div>
 
 <p id="log"></p>
+
+</div>
 
 <script>
 let humanPos = 6;
@@ -215,13 +234,11 @@ function updateUI() {
 
 function checkWin() {
   if (humanPos >= 30) {
-    log(`🏁 Manusia mencapai petak ${humanPos} dengan dadu ${lastDice}`);
     showEnd("🎉 MANUSIA MENANG!\nBerhasil kabur dari rumah angker!");
     return;
   }
 
   if (Math.abs(humanPos - ghostPos) <= 1) {
-    log(`👻 Hantu menangkap manusia (jarak ${Math.abs(humanPos - ghostPos)})`);
     showEnd("👻 HANTU MENANG!\nManusia tertangkap!");
     return;
   }
