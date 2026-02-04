@@ -325,7 +325,7 @@ h1 {
   <button onclick="rollDice()">🎲 Lempar Dadu</button>
   <button onclick="useSkill()">🔥 Aktifkan Skill</button>
   <button onclick="skipSkill()">➡ Selesai</button>
-  <button onclick="resetGame()">🔄 Reset Game</button>
+  
 </div>
 
 <p id="log"></p>
@@ -397,9 +397,11 @@ function useSkill() {
   } 
   else {
     log("❌ Counter tidak cukup");
+    return;
   }
 
-  endTurn();
+  updateUI();
+  checkWin();
 }
 
 function skipSkill() {
@@ -445,18 +447,7 @@ function showEnd(message) {
   }, 500);
 }
 
-function resetGame() {
-  humanPos = 6;
-  ghostPos = 0;
-  humanCounter = 0;
-  ghostCounter = 0;
-  turn = "human";
-  diceRolled = false;
-  lastDice = 0;
 
-  log("🔄 Game di-reset. Manusia mulai dulu.");
-  updateUI();
-}
 
 function log(text) {
   document.getElementById("log").innerText = text;
