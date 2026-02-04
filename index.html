@@ -7,64 +7,164 @@
 
 <style>
 /* RESET + CENTER */
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: #0b0b0b;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: white;
   margin: 0;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
 }
 
 /* WRAPPER */
 .game-wrapper {
   width: 100%;
-  max-width: 540px;
-  padding: 10px;
+  max-width: 580px;
+  padding: 25px 20px;
   text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  animation: slideIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* TITLE */
 h1 {
-  margin-top: 10px;
-  font-size: clamp(18px, 5vw, 28px);
+  margin: 0 0 20px 0;
+  font-size: clamp(24px, 7vw, 36px);
+  background: linear-gradient(135deg, #00d4ff, #ff006e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 0, 110, 0.3);
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
 /* BOARD */
 .board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  gap: 4px;
-  margin: 15px auto;
+  gap: 5px;
+  margin: 20px auto;
   width: 100%;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .cell {
-  border: 1px solid #444;
-  background: #1c1c1c;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, #2a2a4e 0%, #1f1f3f 100%);
   font-weight: bold;
   aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(10px, 3vw, 16px);
+  font-size: clamp(11px, 3vw, 14px);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  color: #aaa;
+}
+
+.cell:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
 }
 
 .human {
-  background: #2ecc71;
-  color: black;
+  background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+  color: #000;
+  font-weight: bold;
+  font-size: clamp(14px, 4vw, 18px);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+  border: none;
+  animation: pulse 1.5s infinite;
 }
 
 .ghost {
-  background: #e74c3c;
+  background: linear-gradient(135deg, #ff1744 0%, #c41c3b 100%);
+  color: white;
+  font-weight: bold;
+  font-size: clamp(14px, 4vw, 18px);
+  box-shadow: 0 0 20px rgba(255, 23, 68, 0.8);
+  border: none;
+  animation: ghostPulse 1.2s infinite;
 }
 
-/* INFO */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes ghostPulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.08); filter: brightness(1.2); }
+}
+
+/* INFO SECTION */
 .info, .counter {
-  margin: 8px 0;
-  font-size: clamp(12px, 3.5vw, 16px);
+  margin: 12px 0;
+  font-size: clamp(13px, 4vw, 15px);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  border-left: 4px solid #00ff88;
+}
+
+.counter {
+  border-left-color: #ff1744;
+}
+
+.info p, .counter p {
+  margin: 6px 0;
+}
+
+.info b, .counter b {
+  color: #00ff88;
+  font-size: 1.1em;
+}
+
+.counter span {
+  color: #ff8a80;
+}
+
+/* TURN INDICATOR */
+.turn-display {
+  font-size: clamp(14px, 5vw, 18px);
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 255, 136, 0.15);
+  border-radius: 10px;
+  margin: 15px 0;
+  border: 2px solid rgba(0, 255, 136, 0.3);
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.6); }
 }
 
 /* CONTROLS */
@@ -72,37 +172,128 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .controls button {
-  padding: 10px 14px;
-  font-size: clamp(12px, 4vw, 14px);
+  padding: 14px 18px;
+  font-size: clamp(12px, 4vw, 15px);
   cursor: pointer;
-  border-radius: 6px;
-  border: none;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  min-width: 110px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.controls button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.controls button:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.controls button:nth-child(1) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+}
+
+.controls button:nth-child(1):hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+}
+
+.controls button:nth-child(2) {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border-color: #f5576c;
+}
+
+.controls button:nth-child(2):hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(245, 87, 108, 0.6);
+}
+
+.controls button:nth-child(3) {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  border-color: #00f2fe;
+  color: #000;
+  font-weight: bold;
+}
+
+.controls button:nth-child(3):hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(79, 172, 254, 0.6);
+}
+
+.controls button:nth-child(4) {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  border-color: #38f9d7;
+  color: #000;
+  font-weight: bold;
+}
+
+.controls button:nth-child(4):hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(67, 233, 123, 0.6);
 }
 
 /* LOG */
 #log {
-  margin-top: 10px;
+  margin-top: 15px;
   font-style: italic;
-  min-height: 24px;
-  font-size: clamp(12px, 3.5vw, 14px);
+  min-height: 30px;
+  font-size: clamp(12px, 4vw, 15px);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #00ff88;
+  font-weight: 500;
+  animation: fadeInOut 0.5s ease;
 }
 
-/* HP KECIL */
-@media (max-width: 480px) {
+@keyframes fadeInOut {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 600px) {
+  .game-wrapper {
+    padding: 20px 15px;
+    margin: 10px;
+  }
+
   .board {
-    gap: 3px;
+    gap: 4px;
+    padding: 12px;
+    grid-template-columns: repeat(10, 1fr);
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 10px;
   }
 
   .controls button {
-    flex: 1 1 45%;
+    width: 100%;
+    flex: 1 1 100%;
   }
 
-  .game-wrapper {
-    padding: 14px;
+  h1 {
+    margin-bottom: 15px;
+  }
+
+  .turn-display {
+    margin: 10px 0;
   }
 }
 </style>
@@ -116,21 +307,24 @@ h1 {
 
 <div class="board" id="board"></div>
 
+<div class="turn-display">
+  🎮 Giliran: <span id="turn">Manusia</span>
+</div>
+
 <div class="info">
-  <p>Giliran: <b><span id="turn">Manusia</span></b></p>
-  <p>Manusia di Petak: <span id="humanPos">6</span></p>
-  <p>Hantu di Petak: <span id="ghostPos">0</span></p>
+  <p>👤 Manusia di Petak: <b><span id="humanPos">6</span></b></p>
+  <p>👻 Hantu di Petak: <b><span id="ghostPos">0</span></b></p>
 </div>
 
 <div class="counter">
-  <p>Danger Counter Manusia: <span id="humanCounter">0</span></p>
-  <p>Danger Counter Hantu: <span id="ghostCounter">0</span></p>
+  <p>⚡ Danger Counter Manusia: <b><span id="humanCounter">0</span>/5</b></p>
+  <p>🔥 Danger Counter Hantu: <b><span id="ghostCounter">0</span>/5</b></p>
 </div>
 
 <div class="controls">
   <button onclick="rollDice()">🎲 Lempar Dadu</button>
   <button onclick="useSkill()">🔥 Aktifkan Skill</button>
-  <button onclick="skipSkill()">➡ Lewati Skill</button>
+  <button onclick="skipSkill()">➡ Selesai</button>
   <button onclick="resetGame()">🔄 Reset Game</button>
 </div>
 
