@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Escape from the Ghost</title>
+<link rel="icon" type="image/png" href="logo.png">
+
 
 <style>
 /* RESET + CENTER */
@@ -335,11 +337,56 @@ h1 {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+.controls button:nth-child(4) {
+  background: linear-gradient(135deg, #ff9a00 0%, #ff3d00 100%);
+  border-color: #ff3d00;
+  color: #000;
+  font-weight: bold;
+}
+
+.controls button:nth-child(4):hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(255, 154, 0, 0.6);
+}
+
+@keyframes resetFlash {
+  0% { background: rgba(255, 255, 255, 0.1); }
+  50% { background: rgba(255, 0, 110, 0.3); }
+  100% { background: rgba(255, 255, 255, 0.1); }
+}
+
+.game-wrapper.resetting {
+  animation: resetFlash 0.6s ease;
+}
+
+.top-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.top-controls button {
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 
 </style>
 </head>
 
 <body>
+<audio id="bgm" src="Shiki OP 1 [Blu-Ray].mp3" loop></audio>
+
+<div class="top-controls">
+  <button onclick="toggleMusic()" id="musicBtn">🔊 PLAY</button>
+  <button onclick="resetGame(true)">🔄 Reset Game</button>
+</div>
+
+
   <div id="loading-screen">
   <div class="loader"></div>
   <p>Loading...</p>
@@ -504,6 +551,50 @@ window.addEventListener("load", () => {
     document.getElementById("loading-screen").style.display = "none";
   }, 1500); // durasi loading (ms)
 });
+
+const bgm = document.getElementById("bgm");
+const musicBtn = document.getElementById("musicBtn");
+let isPlaying = false;
+
+function toggleMusic() {
+  if (!isPlaying) {
+    bgm.play();
+    musicBtn.innerText = "⏸ PAUSE";
+    isPlaying = true;
+  } else {
+    bgm.pause();
+    musicBtn.innerText = "🔊 PLAY";
+    isPlaying = false;
+  }
+}
+
+function resetGame(manual = false) {
+  const wrapper = document.querySelector(".game-wrapper");
+  wrapper.classList.add("resetting");
+
+  setTimeout(() => {
+    wrapper.classList.remove("resetting");
+  }, 600);
+
+  humanPos = 6;
+  ghostPos = 0;
+
+  humanCounter = 0;
+  ghostCounter = 0;
+
+  turn = "human";
+  diceRolled = false;
+  lastDice = 0;
+
+  updateUI();
+
+  log(
+    manual
+      ? "🔄 Game di-reset! Manusia bersiap kabur lagi..."
+      : "🔁 Game baru dimulai!"
+  );
+}
+
 </script>
 
 </body>
