@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Escape from the Ghost</title>
 
 <style>
@@ -10,25 +11,34 @@ body {
   background: #0b0b0b;
   color: white;
   text-align: center;
+  margin: 0;
+  padding: 10px;
 }
 
 h1 {
   margin-top: 10px;
+  font-size: clamp(18px, 5vw, 28px);
 }
 
+/* BOARD RESPONSIVE */
 .board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  gap: 5px;
-  margin: 20px auto;
-  width: 520px;
+  gap: 4px;
+  margin: 15px auto;
+  width: 100%;
+  max-width: 520px;
 }
 
 .cell {
   border: 1px solid #444;
-  padding: 10px;
   background: #1c1c1c;
   font-weight: bold;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(10px, 3vw, 16px);
 }
 
 .human {
@@ -40,21 +50,45 @@ h1 {
   background: #e74c3c;
 }
 
-.controls button {
-  margin: 5px;
-  padding: 10px 15px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
+/* INFO */
 .info, .counter {
-  margin: 8px;
+  margin: 8px 0;
+  font-size: clamp(12px, 3.5vw, 16px);
 }
 
+/* CONTROLS */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.controls button {
+  padding: 10px 14px;
+  font-size: clamp(12px, 4vw, 14px);
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+}
+
+/* LOG */
 #log {
   margin-top: 10px;
   font-style: italic;
-  min-height: 20px;
+  min-height: 24px;
+  font-size: clamp(12px, 3.5vw, 14px);
+}
+
+/* HP KECIL */
+@media (max-width: 480px) {
+  .board {
+    gap: 3px;
+  }
+
+  .controls button {
+    flex: 1 1 45%;
+  }
 }
 </style>
 </head>
