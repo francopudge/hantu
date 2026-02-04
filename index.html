@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Escape from the Ghost</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0b0b0b;
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 10px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 5px;
+  margin: 20px auto;
+  width: 520px;
+}
+
+.cell {
+  border: 1px solid #444;
+  padding: 10px;
+  background: #1c1c1c;
+  font-weight: bold;
+}
+
+.human {
+  background: #2ecc71;
+  color: black;
+}
+
+.ghost {
+  background: #e74c3c;
+}
+
+.controls button {
+  margin: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.info, .counter {
+  margin: 8px;
+}
+
+#log {
+  margin-top: 10px;
+  font-style: italic;
+  min-height: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>ESCAPE FROM THE GHOST</h1>
+
+<div class="board" id="board"></div>
+
+<div class="info">
+  <p>Giliran: <b><span id="turn">Manusia</span></b></p>
+  <p>Manusia di Petak: <span id="humanPos">6</span></p>
+  <p>Hantu di Petak: <span id="ghostPos">0</span></p>
+</div>
+
+<div class="counter">
+  <p>Danger Counter Manusia: <span id="humanCounter">0</span></p>
+  <p>Danger Counter Hantu: <span id="ghostCounter">0</span></p>
+</div>
+
+<div class="controls">
+  <button onclick="rollDice()">🎲 Lempar Dadu</button>
+  <button onclick="useSkill()">🔥 Aktifkan Skill</button>
+  <button onclick="skipSkill()">➡ Lewati Skill</button>
+  <button onclick="resetGame()">🔄 Reset Game</button>
+</div>
+
+<p id="log"></p>
+
+<script>
+let humanPos = 6;
+let ghostPos = 0;
+
+let humanCounter = 0;
+let ghostCounter = 0;
+
+let turn = "human";
+let diceRolled = false;
+let lastDice = 0;
+
+const board = document.getElementById("board");
+
+function createBoard() {
+  board.innerHTML = "";
+  for (let i = 0; i <= 30; i++) {
+    const cell = document.createElement("div");
+    cell.className = "cell";
+
+    if (i === humanPos) cell.classList.add("human");
+    if (i === ghostPos) cell.classList.add("ghost");
+
+    cell.innerText = i;
+    board.appendChild(cell);
+  }
+}
+
+createBoard();
+
+function rollDice() {
+  if (diceRolled) return;
+
+  const dice = Math.floor(Math.random() * 6) + 1;
+  lastDice = dice;
+
+  log(`🎲 ${turn === "human" ? "Manusia" : "Hantu"} lempar dadu: ${dice}`);
+
+  if (turn === "human") {
+    humanPos += dice;
+    if (dice % 2 === 0 && humanCounter < 5) humanCounter++;
+  } else {
+    ghostPos += dice;
+    if (dice % 2 === 0 && ghostCounter < 5) ghostCounter++;
+  }
+
+  diceRolled = true;
+  updateUI();
+  checkWin();
+}
+
+function useSkill() {
+  if (!diceRolled) return;
+
+  if (turn === "human" && humanCounter > 0) {
+    humanPos += 1;
+    humanCounter--;
+    log("🔥 Manusia aktifkan skill: +1 langkah");
+  } 
+  else if (turn === "ghost" && ghostCounter > 0) {
+    humanPos -= 1;
+    ghostCounter--;
+    log("👻 Pocong tarik manusia mundur 1");
+  } 
+  else {
+    log("❌ Counter tidak cukup");
+  }
+
+  endTurn();
+}
+
+function skipSkill() {
+  if (!diceRolled) return;
+  log("➡ Skill dilewati");
+  endTurn();
+}
+
+function endTurn() {
+  diceRolled = false;
+  turn = turn === "human" ? "ghost" : "human";
+  updateUI();
+}
+
+function updateUI() {
+  document.getElementById("turn").innerText =
+    turn === "human" ? "Manusia" : "Hantu";
+
+  document.getElementById("humanPos").innerText = humanPos;
+  document.getElementById("ghostPos").innerText = ghostPos;
+  document.getElementById("humanCounter").innerText = humanCounter;
+  document.getElementById("ghostCounter").innerText = ghostCounter;
+
+  createBoard();
+}
+
+function checkWin() {
+  if (humanPos >= 30) {
+    log(`🏁 Manusia mencapai petak ${humanPos} dengan dadu ${lastDice}`);
+    showEnd("🎉 MANUSIA MENANG!\nBerhasil kabur dari rumah angker!");
+    return;
+  }
+
+  if (Math.abs(humanPos - ghostPos) <= 1) {
+    log(`👻 Hantu menangkap manusia (jarak ${Math.abs(humanPos - ghostPos)})`);
+    showEnd("👻 HANTU MENANG!\nManusia tertangkap!");
+    return;
+  }
+}
+
+function showEnd(message) {
+  setTimeout(() => {
+    alert(message);
+    resetGame();
+  }, 500);
+}
+
+function resetGame() {
+  humanPos = 6;
+  ghostPos = 0;
+  humanCounter = 0;
+  ghostCounter = 0;
+  turn = "human";
+  diceRolled = false;
+  lastDice = 0;
+
+  log("🔄 Game di-reset. Manusia mulai dulu.");
+  updateUI();
+}
+
+function log(text) {
+  document.getElementById("log").innerText = text;
+}
+</script>
+
+</body>
+</html>
