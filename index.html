@@ -374,6 +374,31 @@ h1 {
   cursor: pointer;
 }
 
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0f0f1f, #1a1a2e);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  font-size: 18px;
+}
+
+.loading-logo {
+  width: 220px;
+  max-width: 70%;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 30px rgba(255, 0, 110, 0.7));
+  animation: loadingFloat 2.5s ease-in-out infinite;
+}
+
+@keyframes loadingFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
 
 </style>
 </head>
@@ -387,9 +412,9 @@ h1 {
 </div>
 
 
-  <div id="loading-screen">
-  <div class="loader"></div>
-  <p>Loading...</p>
+ <div id="loading-screen">
+  <img src="logo.png" alt="Loading Logo" class="loading-logo">
+  <p>Loading The Escape From The Ghost...</p>
 </div>
 
 
