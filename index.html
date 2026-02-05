@@ -96,24 +96,23 @@ h1 {
 }
 
 .human {
-  background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
-  color: #000;
-  font-weight: bold;
-  font-size: clamp(14px, 4vw, 18px);
+  background: url("youtubernekat.png") center/contain no-repeat,
+              linear-gradient(135deg, #00ff88, #00cc6a);
   box-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
   border: none;
   animation: pulse 1.5s infinite;
+  color: transparent;
 }
 
 .ghost {
-  background: linear-gradient(135deg, #ff1744 0%, #c41c3b 100%);
-  color: white;
-  font-weight: bold;
-  font-size: clamp(14px, 4vw, 18px);
+  background: url("pocong.png") center/contain no-repeat,
+              linear-gradient(135deg, #ff1744, #c41c3b);
   box-shadow: 0 0 20px rgba(255, 23, 68, 0.8);
   border: none;
   animation: ghostPulse 1.2s infinite;
+  color: transparent;
 }
+
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
@@ -400,10 +399,21 @@ h1 {
   50% { transform: translateY(-10px); }
 }
 
+.icon {
+  width: 26px;
+  height: 26px;
+  vertical-align: middle;
+  margin-right: 8px;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.5));
+  
+}
+
 </style>
 </head>
 
 <body>
+
+  
 <audio id="bgm" src="Shiki OP 1 [Blu-Ray].mp3" loop></audio>
 
 <div class="top-controls">
@@ -426,18 +436,34 @@ h1 {
 <div class="board" id="board"></div>
 
 <div class="turn-display">
-  🎮 Giliran: <span id="turn">Manusia</span>
+ 🎮 Giliran:
+<img id="turnIcon" src="youtubernekat.png" class="icon">
+
 </div>
 
 <div class="info">
-  <p>👤 Manusia di Petak: <b><span id="humanPos">6</span></b></p>
-  <p>👻 Hantu di Petak: <b><span id="ghostPos">0</span></b></p>
+  <p>
+    <img src="youtubernekat.png" class="icon">
+    Manusia di Petak: <b><span id="humanPos">6</span></b>
+  </p>
+  <p>
+    <img src="pocong.png" class="icon">
+    Hantu di Petak: <b><span id="ghostPos">0</span></b>
+  </p>
 </div>
 
+
 <div class="counter">
-  <p>⚡ Danger Counter Manusia: <b><span id="humanCounter">0</span>/5</b></p>
-  <p>🔥 Danger Counter Hantu: <b><span id="ghostCounter">0</span>/5</b></p>
+  <p>
+    <img src="countermanusia.png" class="icon">
+    Danger Counter Manusia: <b><span id="humanCounter">0</span>/5</b>
+  </p>
+  <p>
+    <img src="counterhantu.png" class="icon">
+    Danger Counter Hantu: <b><span id="ghostCounter">0</span>/5</b>
+  </p>
 </div>
+
 
 <div class="controls">
   <button onclick="rollDice()">🎲 Lempar Dadu</button>
@@ -535,8 +561,16 @@ function endTurn() {
 }
 
 function updateUI() {
-  document.getElementById("turn").innerText =
-    turn === "human" ? "Manusia" : "Hantu";
+  const turnIcon = document.getElementById("turnIcon");
+
+if (turn === "human") {
+  turnIcon.src = "youtubernekat.png";
+  turnIcon.alt = "Giliran Manusia";
+} else {
+  turnIcon.src = "pocong.png";
+  turnIcon.alt = "Giliran Hantu";
+}
+
 
   document.getElementById("humanPos").innerText = humanPos;
   document.getElementById("ghostPos").innerText = ghostPos;
